@@ -2,9 +2,28 @@
 
 include('koneksi.php');
 
-$query = mysqli_query($connect, 'SELECT * FROM karyawan');
+$query;
+$result = [];
+$search = "";
 
-$results = mysqli_fetch_all($query, MYSQLI_ASSOC);
+if ($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET['search'])) {
+    $search = mysqli_real_escape_string($connect, $_GET['search']);
+
+    if (empty($search)) {
+        header('Location: list.php');
+        exit();
+    }
+
+    $query = mysqli_query($connect, "SELECT * FROM karyawan WHERE nama LIKE '%$search%'");
+} else {
+    $query = mysqli_query($connect, 'SELECT * FROM karyawan');
+}
+
+if ($query) {
+    $results = mysqli_fetch_all($query, MYSQLI_ASSOC);
+} else {
+    echo "Gagal fetching data";
+}
 
 ?>
 
@@ -20,6 +39,13 @@ $results = mysqli_fetch_all($query, MYSQLI_ASSOC);
 <body>
 
     <a href="add.php">Tambah Data</a>
+
+    <br><br>
+
+    <form action="" method="get">
+        <input type="text" name="search" placeholder="Search..." value="<?= $search ?>">
+        <button type="submit">Search</button>
+    </form>
 
     <br><br>
 
