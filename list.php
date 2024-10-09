@@ -40,6 +40,7 @@ $results = mysqli_fetch_all($query, MYSQLI_ASSOC);
                 <td><?= $result['jenis_kelamin'] ?></td>
                 <td>
                     <a href="edit.php?id=<?= $result['id'] ?>">Edit</a>
+                    <a href="delete.php?id=<?= $result['id'] ?>">Delete</a>
                 </td>
             </tr>
         <?php endforeach ?>
